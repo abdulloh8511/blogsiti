@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <!-- Blog List Section Begin -->
+    {% if blogs %}
+    <section class="recipe-section spad">
+        <div class="container">
+            <div class="row">
+                {% for blog in blogs %}
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="recipe-item">
+                            <a href="{% url 'blog_detail' blog.pk %}">
+                                {% if blog.image_src %}
+                                    <img src="{{ blog.image_src }}" alt="{{ blog.title }}">
+                                {% else %}
+                                    <img src="{% static 'img/recipe-1.jpg' %}" alt="{{ blog.title }}">
+                                {% endif %}
+                            </a>
+                            <div class="ri-text">
+                                <div class="cat-name">{{ blog.category.name }}</div>
+                                <a href="{% url 'blog_detail' blog.pk %}">
+                                    <h4>{{ blog.title }}</h4>
+                                </a>
+                                <p>{{ blog.excerpt|default:blog.content|truncatewords:20 }}</p>
+                            </div>
+                            <span>
+                                <i class="fa fa-eye"></i> {{ blog.views }} marta ko‘rilgan
+                                &nbsp;|&nbsp;
+                                <i class="fa fa-heart"></i> {{ blog.bloglike_set.count }}
+                            </span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="recipe-pagination">
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">First</a>
+                            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">Previous</a>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <a href="#" class="active">{{ num }}</a>
+                            {% else %}
+                                <a href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">Next</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">Last</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+    {% else %}
+    <section class="recipe-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <p style="text-align: center; font-size: 18px;">Bloglar topilmadi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+    <!-- Blog List Section End -->
+
+{% endblock content %}

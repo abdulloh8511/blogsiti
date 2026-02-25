@@ -1,0 +1,187 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="BlogSite - o‘zbekcha blog platformasi">
+    <meta name="keywords" content="blog, maqola, o'zbek, blogsite">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BlogSite</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <style>
+        .hero-search .filter-table {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 28px 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+        .hero-search .hero-title {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .hero-search .hero-title h2 {
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .hero-search .hero-title p {
+            margin-bottom: 0;
+            color: #555;
+        }
+        .badge {
+            padding: 6px 10px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <header class="header-section-other">
+        <div class="container-fluid">
+            <div class="logo">
+                <a href="{% url 'home' %}"><img src="{% static 'img/little-logo.png' %}" alt=""></a>
+            </div>
+            <div class="nav-menu">
+                <nav class="main-menu mobile-menu">
+                    <ul>
+                        <li class="active"><a href="{% url 'home' %}">Bosh sahifa</a></li>
+                        <li><a href="{% url 'blog_list' %}">Bloglar</a></li>
+                        <li><a href="{% url 'categories' %}">Kategoriyalar</a></li>
+                        <li><a href="{% url 'contact' %}">Aloqa</a></li>
+                        <li><a href="#">Hisob</a>
+                            <ul class="sub-menu">
+                                {% if user.is_authenticated %}
+                                <li><a href="{% url 'profile' %}">Salom, {{ user.username }}</a></li>
+                                <li><a href="{% url 'logout' %}">Chiqish</a></li>
+                                {% else %}
+                                <li><a href="{% url 'login' %}">Kirish</a></li>
+                                <li><a href="{% url 'register' %}">Ro‘yxatdan o‘tish</a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="nav-right search-switch">
+                    <i class="fa fa-search"></i>
+                </div>
+            </div>
+            <div id="mobile-menu-wrap"></div>
+        </div>
+    </header>
+    <!-- Header End -->
+
+    <!-- Hero Search Section Begin -->
+    <div class="hero-search set-bg" data-setbg="{% static 'img/search-bg.jpg' %}">
+        <div class="container">
+            <div class="filter-table">
+                <div class="hero-title">
+                    <h2>BlogSite</h2>
+                    <p>Eng yaxshi o‘zbekcha bloglar platformasi</p>
+                </div>
+                <form action="{% url 'blog_list' %}" method="GET" class="filter-search">
+                    <input type="text" name="search" placeholder="Blog qidirish">
+                    <select id="category" name="category">
+                        <option value="">Kategoriya</option>
+                        {% if categories %}
+                        {% for category in categories %}
+                        <option value="{{ category.pk }}">{{ category.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                        <button type="submit">Qidirish</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Hero Search Section End -->
+
+    {% block content %}
+    {% endblock content %}
+
+    <!-- Footer Section Begin -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="fs-left">
+                        <div class="logo">
+                            <a href="{% url 'home' %}">
+                                <img src="{% static 'img/footer-logo.png' %}" alt="">
+                            </a>
+                        </div>
+                        <p>BlogSite - o‘zbekcha blog platformasi. Bu yerda siz turli mavzularda maqolalarni o‘qishingiz
+                            va o‘zingizning bloglaringizni yaratishingiz mumkin.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 offset-lg-1">
+                    <form action="#" class="subscribe-form">
+                        <h3>Yangiliklarga obuna bo‘ling</h3>
+                        <input type="email" placeholder="Email manzilingiz">
+                        <button type="submit">Obuna bo‘lish</button>
+                    </form>
+                    <div class="social-links">
+                        <a href="#"><i class="fa fa-instagram"></i><span>Instagram</span></a>
+                        <a href="#"><i class="fa fa-pinterest"></i><span>Pinterest</span></a>
+                        <a href="#"><i class="fa fa-facebook"></i><span>Facebook</span></a>
+                        <a href="#"><i class="fa fa-twitter"></i><span>Twitter</span></a>
+                        <a href="#"><i class="fa fa-youtube"></i><span>Youtube</span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="copyright-text">
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        Copyright &copy;
+                        <script>document.write(new Date().getFullYear());</script> All rights reserved | This template
+                        is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com"
+                            target="_blank">Colorlib</a>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Search model -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form action="{% url 'blog_list' %}" method="GET" class="search-model-form">
+                <input type="text" name="search" id="search-input" placeholder="Qidirish...">
+            </form>
+        </div>
+    </div>
+    <!-- Search model end -->
+
+    <!-- Js Plugins -->
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.slicknav.js' %}"></script>
+    <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'js/mixitup.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>
+
+
+

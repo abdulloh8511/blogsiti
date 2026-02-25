@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <!-- Categories Section Begin -->
+    <section class="recipe-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h2>Kategoriyalar</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                {% if categories %}
+                    {% for category in categories %}
+                        <div class="col-lg-4 col-sm-6">
+                            <div class="recipe-item">
+                                <a href="{% url 'category_detail' category.pk %}">
+                                    {% if category.image %}
+                                        <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                                    {% else %}
+                                        <img src="{% static 'img/recipe-1.jpg' %}" alt="{{ category.name }}">
+                                    {% endif %}
+                                </a>
+                                <div class="ri-text">
+                                    <div class="cat-name">{{ category.name }}</div>
+                                    <a href="{% url 'category_detail' category.pk %}">
+                                        <h4>{{ category.name }}</h4>
+                                    </a>
+                                    <p>{{ category.description|default:"Ushbu kategoriyadagi bloglarni ko‘rish."|truncatewords:20 }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-lg-12">
+                        <p style="text-align: center; font-size: 18px;">Kategoriya yo‘q.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+    <!-- Categories Section End -->
+
+{% endblock content %}

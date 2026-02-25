@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Blog Detail Section Begin -->
+<section class="recipe-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Blog Post -->
+                <div class="blog-detail">
+                    {% if blog.image_src %}
+                        <img src="{{ blog.image_src }}" alt="{{ blog.title }}" class="blog-detail__image">
+                    {% else %}
+                        <img src="{% static 'img/recipe-single.jpg' %}" alt="{{ blog.title }}" class="blog-detail__image">
+                    {% endif %}
+                    
+                    <div class="blog-detail__info">
+                        <span class="cat-name">{{ blog.category.name }}</span>
+                        <span class="blog-detail__author">Muallif: {{ blog.author.username }}</span>
+                        <span class="blog-detail__date">Sana: {{ blog.created_at|date:"d M Y" }}</span>
+                    </div>
+                    
+                    <h2 class="blog-detail__title">{{ blog.title }}</h2>
+                    
+                    <div class="blog-detail__content">
+                        {{ blog.content }}
+                    </div>
+
+                    <div class="mt-3">
+                        <span><i class="fa fa-eye"></i> {{ blog.views }} marta ko‘rilgan</span>
+                        <span class="ml-3"><i class="fa fa-heart"></i> {{ like_count }} ta like</span>
+                    </div>
+
+                    {% if blog.tags.all %}
+                    <div class="mt-3">
+                        <strong>Taglar:</strong>
+                        {% for tag in blog.tags.all %}
+                            <span class="badge badge-light">{{ tag.name }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="mt-3">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'blog_like' blog.pk %}" class="site-btn">
+                                {% if user_liked %}Like olib tashlash{% else %}Like bosish{% endif %}
+                            </a>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="site-btn">Like bosish uchun kiring</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Comments Section -->
+                <div class="comments-section">
+                    <h3 class="comments-section__title">Izohlar ({{ comments.count }})</h3>
+                    
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <!-- Comments List -->
+                    {% if comments %}
+                    <div class="comments-list">
+                        {% for comment in comments %}
+                        <div class="comment-item">
+                            <div class="comment-item__header">
+                                <strong class="comment-item__author">{{ comment.author.username }}</strong>
+                                <small class="comment-item__date">{{ comment.created_at|date:"d M Y, H:i" }}</small>
+                            </div>
+                            <p class="comment-item__content">{{ comment.content }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="comments-empty">Hozircha izoh yo‘q. Birinchi bo‘lib izoh qoldiring.</p>
+                    {% endif %}
+                    
+                    <!-- Comment Form -->
+                    <div class="add-comment">
+                        {% if user.is_authenticated %}
+                            <h4 class="add-comment__title">Izoh qoldirish</h4>
+                            <form method="POST" action="{% url 'blog_detail' blog.pk %}" class="comment-form">
+                                {% csrf_token %}
+                                <textarea name="comment" id="comment" rows="5" placeholder="Izohingizni yozing..." required class="comment-form__textarea"></textarea>
+                                <button type="submit" class="site-btn">Izoh yuborish</button>
+                            </form>
+                        {% else %}
+                        <div class="alert alert-warning">
+                            <h4>Izoh qoldirmoqchimisiz?</h4>
+                            <p>Izoh qoldirish uchun tizimga kiring.</p>
+                            <div class="auth-buttons">
+                                <a href="{% url 'login' %}" class="site-btn">Kirish</a>
+                                <a href="{% url 'register' %}" class="site-btn">Ro‘yxatdan o‘tish</a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <h4>Kategoriyalar</h4>
+                    <ul>
+                        {% for cat in categories %}
+                        <li>
+                            <a href="{% url 'category_detail' cat.pk %}">{{ cat.name }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Blog Detail Section End -->
+
+{% endblock content %}

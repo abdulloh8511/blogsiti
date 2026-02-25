@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <!-- Contact Section Begin -->
+    <section class="contact-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form action="{% url 'contact' %}" method="POST" class="contact-form">
+                        {% csrf_token %}
+                        <h3>Xabar qoldirish</h3>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <input type="text" name="name" placeholder="Ismingiz" required>
+                            </div>
+                            <div class="col-lg-6">
+                                <input type="email" name="email" placeholder="Email manzilingiz" required>
+                            </div>
+                            <div class="col-lg-12">
+                                <input type="text" name="subject" placeholder="Mavzu" required>
+                                <textarea name="message" placeholder="Xabar" required></textarea>
+                            </div>
+                        </div>
+                        <button type="submit">Xabar yuborish</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section End -->
+
+{% endblock content %}

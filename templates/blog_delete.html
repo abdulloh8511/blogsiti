@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="mb-3">Blogni o‘chirish</h4>
+                    <p>"{{ blog.title }}" blogini o‘chirmoqchimisiz?</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Ha, o‘chir</button>
+                        <a href="{% url 'profile' %}" class="btn btn-link">Bekor qilish</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

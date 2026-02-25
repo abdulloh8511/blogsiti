@@ -1,0 +1,21 @@
+{% extends 'base.html' %}  
+
+{% block content %}
+    <div class="post-detail">
+        <h1>{{ post.title }}</h1>
+        
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 100%; margin-bottom: 20px;">
+        {% endif %}
+        
+        <p><strong>Muallif:</strong> {{ post.author|default:"Noma'lum" }}</p>
+        <p><strong>Sana:</strong> {{ post.created_at|date:"d F Y, H:i" }}</p>
+        <p><strong>Kategoriya:</strong> {{ post.category.name|default:"—" }}</p>
+        
+        <div class="content">
+            {{ post.content|safe }} 
+        </div>
+        
+      
+    </div>
+{% endblock %}
